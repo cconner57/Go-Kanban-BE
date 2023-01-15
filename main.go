@@ -1,16 +1,14 @@
 package main
 
 import (
-	"net/http"
 	"github.com/gin-gonic/gin"
+	"kanban/api/handler"
 )
 
 func main() {
-	r := gin.Default()
+	router := gin.Default()
 
-	r.GET("/", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"data": "hello world"})
-	})
+	router.GET("/", routes.GetTasks)
 
-	r.Run()
+	router.Run()
 }
