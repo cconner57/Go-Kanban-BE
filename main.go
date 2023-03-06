@@ -15,6 +15,7 @@ func main() {
         AllowHeaders: []string{"Content-Type,access-control-allow-origin, access-control-allow-headers"},
     }))
 
+	// import routes from handler
 	router.GET("/", routes.GetTasks)
 
 	router.Run()
