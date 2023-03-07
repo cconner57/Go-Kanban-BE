@@ -9,6 +9,7 @@ type Board struct {
 type Column struct {
 	ID string `json:"id"`
 	Title string `json:"title"`
+	Color string `json:"color"`
 	Task []Task `json:"task"`
 }
 
