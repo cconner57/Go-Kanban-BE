@@ -51,4 +51,6 @@ var board = []types.Board{
 
 func GetTasks(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, board)
+
+	defer c.Request.Body.Close()
 }
