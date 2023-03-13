@@ -1,22 +1,30 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
-	"github.com/gin-contrib/cors"
-	"kanban/api/handler"
+	"net/http"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	"github.com/go-chi/cors"
+
+	R "kanban/api/handler"
 )
 
 func main() {
-	router := gin.Default()
+	r := chi.NewRouter()
 
-	router.Use(cors.New(cors.Config{
-        AllowOrigins: []string{"*"},
-        AllowMethods: []string{"POST", "PUT", "PATCH", "DELETE"},
-        AllowHeaders: []string{"Content-Type,access-control-allow-origin, access-control-allow-headers"},
-    }))
+	r.Use(middleware.Logger)
+	
+	r.Get("/", R.GetTasks)
 
-	// import routes from handler
-	router.GET("/", routes.GetTasks)
+	cors := cors.New(cors.Options{
+		AllowedOrigins:   []string{"*"},
+		AllowCredentials: true,
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
+		AllowedHeaders:   []string{"access-control-allow-headers", "Content-Type", "access-control-allow-origin"},
+	})
 
-	router.Run()
+	r.Use(cors.Handler)
+
+	http.ListenAndServe(":3000", r)
 }

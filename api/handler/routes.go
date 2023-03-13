@@ -1,10 +1,9 @@
 package routes
 
 import (
+	"encoding/json"
 	"kanban/api/types"
 	"net/http"
-
-	"github.com/gin-gonic/gin"
 )
 
 var board = []types.Board{
@@ -49,8 +48,8 @@ var board = []types.Board{
 	}},
 }
 
-func GetTasks(c *gin.Context) {
-	c.IndentedJSON(http.StatusOK, board)
-
-	defer c.Request.Body.Close()
+func GetTasks(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(board)	
 }
