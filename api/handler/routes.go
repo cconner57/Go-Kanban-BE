@@ -11,7 +11,7 @@ var board = []types.Board{
 		{ID: "1", Title: "To Do", Color: "#49c4e5", Task: []types.Task{
 			{ID: "1", Title: "Build UI for onboarding flow", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
 			{ID: "2", Title: "Build UI for search", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
-			{ID: "3", Title: "Build settings UI", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
+			{ID: "3", Title: "Build settings UI", Column: "todo", SubTask: []types.SubTaskItem{{Finished: false, Description: "Research competitor pricing and buiness models"},{Finished: true, Description: "Outlne a business model that works for our solution"},{Finished: false, Description: "Talk to potential customers abour our proposed solution and ask for fair price expectancy"}}},
 		}},
 		{ID: "2", Title: "In Progress", Color: "#8471F2", Task: []types.Task{
 			{ID: "4", Title: "Build settings UI", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
