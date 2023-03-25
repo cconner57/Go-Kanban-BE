@@ -1,26 +1,25 @@
 package types
 
 type Board struct {
-	ID string `json:"id"`
-	Title string `json:"title"`
+	Id string `json:"id"`
+	Name string `json:"name"`
 	Column []Column `json:"column"`
 }
 
 type Column struct {
-	ID string `json:"id"`
-	Title string `json:"title"`
+	Id string `json:"id"`
+	Name string `json:"name"`
 	Color string `json:"color"`
 	Task []Task `json:"task"`
 }
 
 type Task struct {
-	ID string `json:"id"`
-	Title string `json:"title"`
-	Column string `json:"column"`
-	SubTask []SubTaskItem `json:"subTask"`
+	Id string `json:"id"`
+	Name string `json:"name"`
+	SubTask []SubTask `json:"subTask"`
 }
 
-type SubTaskItem struct {
-	Finished bool `json:"finished"`
+type SubTask struct {
+	Completed bool `json:"completed"`
 	Description string `json:"description"`
 }

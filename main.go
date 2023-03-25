@@ -5,11 +5,17 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/cors"
-
+	C "kanban/api/logic"
 	R "kanban/api/handler"
+
+	_ "github.com/lib/pq"
 )
 
+
+
 func main() {
+	C.ConnectDB()
+
 	r := chi.NewRouter()
 	
 	cors := cors.New(cors.Options{

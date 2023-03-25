@@ -1,55 +1,55 @@
 package routes
 
 import (
-	"encoding/json"
 	"kanban/api/types"
+	
+	"database/sql"
+	_ "github.com/lib/pq"
+	"fmt"
 	"net/http"
+	
+	"log"
 )
 
-var board = []types.Board{
-	{ID: "1", Title: "Platform Launch", Column: []types.Column{
-		{ID: "1", Title: "To Do", Color: "#49c4e5", Task: []types.Task{
-			{ID: "1", Title: "Build UI for onboarding flow", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
-			{ID: "2", Title: "Build UI for search", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
-			{ID: "3", Title: "Build settings UI", Column: "todo", SubTask: []types.SubTaskItem{{Finished: false, Description: "Research competitor pricing and buiness models"},{Finished: true, Description: "Outlne a business model that works for our solution"},{Finished: false, Description: "Talk to potential customers abour our proposed solution and ask for fair price expectancy"}}},
-		}},
-		{ID: "2", Title: "In Progress", Color: "#8471F2", Task: []types.Task{
-			{ID: "4", Title: "Build settings UI", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
-		}},
-		{ID: "3", Title: "Done", Color: "#67E2AE", Task: []types.Task{
-			{ID: "5", Title: "QA and test all major user journeys", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
-		}},
-	}},
-	{ID: "2", Title: "Marketing Plan", Column: []types.Column{
-		{ID: "1", Title: "To Do", Color: "#49c4e5", Task: []types.Task{
-			{ID: "1", Title: "Build UI for onboarding flow", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
-			{ID: "2", Title: "Build UI for search", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
-		}},
-		{ID: "2", Title: "In Progress", Color: "#8471F2", Task: []types.Task{
-			{ID: "4", Title: "Build settings UI", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
-		}},
-		{ID: "3", Title: "Done", Color: "#67E2AE", Task: []types.Task{
-			{ID: "5", Title: "QA and test all major user journeys", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
-		}},
-	}},
-	{ID: "3", Title: "Roadmap", Column: []types.Column{
-		
-		{ID: "2", Title: "To Do", Color: "#8471F2", Task: []types.Task{
-			{ID: "4", Title: "Build settings UI", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
-		}},
-		{ID: "3", Title: "In Progress", Color: "#67E2AE", Task: []types.Task{
-			{ID: "5", Title: "QA and test all major user journeys", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
-		}},
-		{ID: "1", Title: "Done", Color: "#49c4e5", Task: []types.Task{
-			{ID: "1", Title: "Build UI for onboarding flow", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
-			{ID: "2", Title: "Build UI for search", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
-			{ID: "3", Title: "Build settings UI", Column: "todo", SubTask: []types.SubTaskItem{{Finished: true, Description: ""},{Finished: true, Description: ""}}},
-		}},
-	}},
-}
+var db *sql.DB
 
 func GetTasks(w http.ResponseWriter, r *http.Request) {
+	if r.Method != "GET" {
+		http.Error(w, http.StatusText(405), http.StatusMethodNotAllowed)
+	}
+
+	rowsRs, err := db.Query("SELECT * FROM boards")
+
+	if err != nil {
+		http.Error(w, http.StatusText(500), http.StatusInternalServerError)
+		return
+	}
+	defer rowsRs.Close()
+
+	var boards []types.Board = []types.Board{}
+
+	for rowsRs.Next() {
+		brd := types.Board{}
+		err := rowsRs.Scan(&brd.Id, &brd.Name)
+		if err != nil {
+			log.Println(err)
+			http.Error(w, http.StatusText(500), 500)
+			return
+		}
+		boards = append(boards, brd)
+	}
+
+	if err = rowsRs.Err(); err != nil {
+		http.Error(w, http.StatusText(500), 500)
+		return
+	}
+
+	for _, brd := range boards {
+		fmt.Fprintf(w, "%s %s\n", brd.Id, brd.Name)
+	}
+
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	json.NewEncoder(w).Encode(board)	
+	// json.NewEncoder(w).Encode(board)	
 }
