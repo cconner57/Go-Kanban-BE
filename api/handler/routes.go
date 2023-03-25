@@ -1,13 +1,15 @@
 package routes
 
 import (
+	"encoding/json"
 	"kanban/api/types"
-	
+
 	"database/sql"
-	_ "github.com/lib/pq"
 	"fmt"
 	"net/http"
-	
+
+	_ "github.com/lib/pq"
+
 	"log"
 )
 
@@ -51,5 +53,5 @@ func GetTasks(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
-	// json.NewEncoder(w).Encode(board)	
+	json.NewEncoder(w).Encode(boards)	
 }
