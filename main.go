@@ -7,7 +7,7 @@ import (
 	C "kanban/api/logic"
 
 	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/cors"
+	// "github.com/go-chi/cors"
 
 	_ "github.com/lib/pq"
 )
