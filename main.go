@@ -20,7 +20,6 @@ func main() {
 	r := chi.NewRouter()
 	
 	cors := cors.New(cors.Options{
-		AllowedOrigins:   []string{"https://*", "http://*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		AllowCredentials: false,
